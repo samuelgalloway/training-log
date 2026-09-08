@@ -39,10 +39,11 @@ you can retry.
 ## Stack
 
 - Next.js 16 (App Router) + API routes, deployed to Vercel.
-- Google Sheets for logged data (`sets`, `sessions`, `body` tabs), via a
-  service account.
-- Google Drive for the equipment/plate-inventory config and one JSON file
-  per training block (active + archived, never overwritten wholesale).
+- Google Sheets for logged data (`sets`, `sessions`, `body` tabs) and Google
+  Drive for the equipment/plate-inventory config and one JSON file per
+  training block (active + archived, never overwritten wholesale) — both via
+  OAuth with a single narrow scope (`drive.file`), not a service account. See
+  **Why OAuth, not a service account** below.
 - No auth — this is meant to run at an unlisted URL for one person.
 
 ## Setup
@@ -54,39 +55,49 @@ npm install
 cp .env.example .env
 ```
 
-### 2. Create a Google service account
+### 2. Create an OAuth client
 
 1. In [Google Cloud Console](https://console.cloud.google.com/), create (or
    pick) a project, then enable the **Google Sheets API** and **Google Drive
-   API**.
-2. Create a service account (IAM & Admin → Service Accounts), then create a
-   JSON key for it and download it.
-3. From that JSON key file, copy `client_email` into
-   `GOOGLE_SERVICE_ACCOUNT_EMAIL` and `private_key` into
-   `GOOGLE_PRIVATE_KEY` in your `.env` (keep the `\n` escapes literal — the
-   app converts them to real newlines at startup).
+   API** (APIs & Services → Library).
+2. APIs & Services → **OAuth consent screen**: User type **External**, add
+   your own Google account as a test user, then click **Publish app**. This
+   step matters — an app left in "Testing" status gets refresh tokens that
+   silently expire after 7 days, which would break syncing a week after you
+   set it up. Publishing doesn't require Google's verification review here:
+   verification is only required for sensitive scopes at 100+ users, and
+   this app has one narrow scope and one user.
+3. APIs & Services → **Credentials** → Create Credentials → **OAuth client
+   ID** → Application type **Desktop app**. Copy the Client ID and Client
+   Secret into `.env` as `GOOGLE_OAUTH_CLIENT_ID` / `GOOGLE_OAUTH_CLIENT_SECRET`.
 
-### 3. Create the Google Sheet
+### 3. Run the setup script — **from your own machine**, not a remote shell
 
-Create a new Google Sheet with **three tabs**, named exactly:
+```bash
+npm run setup:google
+```
 
-- `sets` — header row: `session_id, date, exercise, implement, set_index, weight_lb, reps, rpe, note`
-- `sessions` — header row: `session_id, date, block_id, week, dow, type, name, status, sleep, soreness, joint_flag, note, rpe, avg_hr, distance_mi`
-  (the last three columns extend SPEC.md's base list — RPE/HR/distance need
-  somewhere to live for non-lift sessions and the brief's mileage/HR checks)
-- `body` — header row: `date, bodyweight_lb, waist_in, chest_in, arm_in, thigh_in`
+This needs to open a real browser, so it won't work from a cloud/remote
+session — run it locally. It:
 
-**Share the sheet with your service account's email** (Editor access), then
-copy its spreadsheet ID (from the URL, between `/d/` and `/edit`) into
-`GOOGLE_SHEETS_ID`.
+1. Prints a Google authorization URL. Open it, sign in, and click through
+   the **"Google hasn't verified this app"** warning (Advanced → Go to
+   Training Log (unsafe)) — expected for a personal app that was never
+   submitted for Google's verification process, which isn't needed for a
+   single-user tool with a narrow scope.
+2. Mints a refresh token.
+3. Creates the Drive folder and Google Sheet (with its three tabs and header
+   rows) itself, under your own Google account.
+4. Prints `GOOGLE_OAUTH_REFRESH_TOKEN`, `GOOGLE_DRIVE_FOLDER_ID`, and
+   `GOOGLE_SHEETS_ID` — paste all three into `.env`.
 
-### 4. Create the Google Drive folder
-
-Create a folder in Drive for this app's data, **share it with the service
-account's email** (Editor access), and copy its folder ID (from the URL,
-after `/folders/`) into `GOOGLE_DRIVE_FOLDER_ID`. The app writes two kinds of
-file into it: `config.json` (equipment/plate inventory) and
-`block-<id>.json` (one per training block).
+There's no "share this with a service account" step, because there's no
+separate identity to share with — the app only has access to the two files
+it just created for itself (that's what the `drive.file` OAuth scope means:
+per-file access, granted only to files the app creates or opens). If you
+ever want to cut off access entirely, revoke it at
+[myaccount.google.com/permissions](https://myaccount.google.com/permissions)
+and re-run this script to get a fresh token.
 
 ### 5. Run it
 
@@ -115,10 +126,23 @@ rounded to a clean 225.
 ## Deploying to Vercel
 
 This is a stock Next.js App Router project — connect the repo in Vercel and
-it deploys with zero extra config. Add the same four env vars
-(`GOOGLE_SERVICE_ACCOUNT_EMAIL`, `GOOGLE_PRIVATE_KEY`, `GOOGLE_SHEETS_ID`,
-`GOOGLE_DRIVE_FOLDER_ID`) in the Vercel project settings. Keep the URL
-unlisted (don't link it anywhere public) since there's no auth.
+it deploys with zero extra config. Add the same env vars from your `.env`
+(`GOOGLE_OAUTH_CLIENT_ID`, `GOOGLE_OAUTH_CLIENT_SECRET`,
+`GOOGLE_OAUTH_REFRESH_TOKEN`, `GOOGLE_DRIVE_FOLDER_ID`, `GOOGLE_SHEETS_ID`)
+in the Vercel project settings. Keep the URL unlisted (don't link it
+anywhere public) since there's no auth.
+
+## Why OAuth, not a service account
+
+A service account would also work here, but it needs a separate identity
+that you then manually share your Sheet and Drive folder with — an extra
+step, and a static key that never expires on its own. OAuth with the
+`drive.file` scope instead means: run the setup script once, and the app can
+only ever see the two files it created for itself — nothing else in your
+Drive, ever, structurally, not by configuration. It's also easier to revoke
+(one click at myaccount.google.com/permissions) and the refresh token isn't
+a bearer credential that grants broad account access if it ever leaked — it
+only reaches those two app-created files.
 
 ## Project layout
 
@@ -131,7 +155,9 @@ src/
   lib/                                      — pure domain logic (isomorphic, unit-tested)
     server/                                — server-only Sheets/Drive/auth wrappers
 data/block-01-strength-base.json           — a real block for reference/import
-scripts/gen_block1.py                      — the script used to author that sample block
+scripts/
+  setup-google-oauth.mjs                   — one-time OAuth + Drive/Sheets bootstrap (see Setup above)
+  gen_block1.py                            — the script used to author the sample block
                                               (dev reference only — this app never
                                               generates plans itself; blocks are
                                               authored elsewhere and pasted in)

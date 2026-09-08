@@ -8,7 +8,8 @@ size matter more than visual polish.
 
 - Next.js (App Router) + API routes. Deploy to Vercel.
 - No auth. Single user, unlisted URL.
-- Google Sheets for logged data (service account). Tabs: `sets`, `sessions`, `body`.
+- Google Sheets for logged data (OAuth, `drive.file` scope — not a service
+  account; see README's "Why OAuth" section). Tabs: `sets`, `sessions`, `body`.
 - Google Drive for plan JSON files, one per block.
 - Credentials via env vars only. Never hard-coded, never in the client bundle.
 

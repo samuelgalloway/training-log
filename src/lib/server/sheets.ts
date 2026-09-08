@@ -1,6 +1,7 @@
 // Server-only. Reads/writes the three flat Sheets tabs: sets, sessions, body.
-// Column order here IS the header row contract — see README's Google Sheets
-// setup section for the exact headers to create.
+// Column order here IS the header row contract — scripts/setup-google-oauth.mjs
+// creates the spreadsheet with these exact headers, so this file and that
+// script must stay in sync if a column is ever added.
 import "server-only";
 import { google } from "googleapis";
 import { getGoogleAuth, requireEnv } from "./googleAuth";

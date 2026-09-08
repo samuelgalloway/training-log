@@ -1,8 +1,11 @@
 // Server-only. Google Drive holds two kinds of file, both inside one folder
-// (GOOGLE_DRIVE_FOLDER_ID): `config.json` (equipment/plate inventory +
-// which block is active) and `block-<id>.json` (one per training block,
-// active or archived — never overwritten wholesale, only status/outcome
-// fields are amended on archive).
+// (GOOGLE_DRIVE_FOLDER_ID, created by scripts/setup-google-oauth.mjs):
+// `config.json` (equipment/plate inventory + which block is active) and
+// `block-<id>.json` (one per training block, active or archived — never
+// overwritten wholesale, only status/outcome fields are amended on
+// archive). Auth is OAuth with drive.file scope (see googleAuth.ts) — every
+// file here was created by this app, which is exactly what that scope
+// grants access to.
 import "server-only";
 import { Readable } from "node:stream";
 import { google } from "googleapis";

@@ -1,32 +1,32 @@
 // Server-only. Never import this from a client component — the whole point
 // is that these credentials never reach the client bundle.
+//
+// OAuth, not a service account: a single narrow scope (drive.file) that can
+// only ever touch files THIS app created (the Drive folder + block JSON
+// files, and the Sheet it creates via the Sheets API — Sheets are Drive
+// files under the hood, so drive.file access carries over to the Sheets API
+// calls in sheets.ts). There's no "share this with a weird email" step —
+// run `npm run setup:google` once (see scripts/setup-google-oauth.mjs and
+// README.md) to mint the refresh token and bootstrap the folder + Sheet.
 import "server-only";
 import { google } from "googleapis";
 
-const SCOPES = ["https://www.googleapis.com/auth/spreadsheets", "https://www.googleapis.com/auth/drive"];
-
-let cached: InstanceType<typeof google.auth.JWT> | null = null;
+let cached: InstanceType<typeof google.auth.OAuth2> | null = null;
 
 export function getGoogleAuth() {
   if (cached) return cached;
 
-  const email = process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL;
-  const rawKey = process.env.GOOGLE_PRIVATE_KEY;
+  const clientId = requireEnv("GOOGLE_OAUTH_CLIENT_ID");
+  const clientSecret = requireEnv("GOOGLE_OAUTH_CLIENT_SECRET");
+  const refreshToken = requireEnv("GOOGLE_OAUTH_REFRESH_TOKEN");
 
-  if (!email || !rawKey) {
-    throw new Error(
-      "Missing GOOGLE_SERVICE_ACCOUNT_EMAIL / GOOGLE_PRIVATE_KEY env vars. See .env.example."
-    );
-  }
+  const client = new google.auth.OAuth2(clientId, clientSecret);
+  client.setCredentials({ refresh_token: refreshToken });
+  // google-auth-library transparently exchanges this for a fresh access
+  // token (and re-exchanges on expiry) on every API call — no manual
+  // refresh handling needed here, same as the old JWT client's behavior.
 
-  const privateKey = rawKey.replace(/\\n/g, "\n");
-
-  cached = new google.auth.JWT({
-    email,
-    key: privateKey,
-    scopes: SCOPES,
-  });
-
+  cached = client;
   return cached;
 }
 
