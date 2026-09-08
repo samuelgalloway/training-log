@@ -6,8 +6,9 @@
 // files, and the Sheet it creates via the Sheets API — Sheets are Drive
 // files under the hood, so drive.file access carries over to the Sheets API
 // calls in sheets.ts). There's no "share this with a weird email" step —
-// run `npm run setup:google` once (see scripts/setup-google-oauth.mjs and
-// README.md) to mint the refresh token and bootstrap the folder + Sheet.
+// visit /setup on the deployed app and click "Connect Google" (see
+// src/app/api/auth/google/ and README.md) to mint the refresh token and
+// bootstrap the folder + Sheet, entirely in the browser.
 import "server-only";
 import { google } from "googleapis";
 

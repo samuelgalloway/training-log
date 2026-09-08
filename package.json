@@ -7,8 +7,7 @@
     "build": "next build",
     "start": "next start",
     "test": "vitest run",
-    "test:watch": "vitest",
-    "setup:google": "node scripts/setup-google-oauth.mjs"
+    "test:watch": "vitest"
   },
   "dependencies": {
     "googleapis": "^144.0.0",
@@ -22,7 +21,6 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "autoprefixer": "^10.4.19",
-    "dotenv": "^16.4.5",
     "postcss": "^8.4.38",
     "tailwindcss": "^3.4.4",
     "typescript": "^5.5.2",

@@ -1,5 +1,6 @@
 // Server-only. Google Drive holds two kinds of file, both inside one folder
-// (GOOGLE_DRIVE_FOLDER_ID, created by scripts/setup-google-oauth.mjs):
+// (GOOGLE_DRIVE_FOLDER_ID, created by the "Connect Google" flow — see
+// src/app/api/auth/google/ and src/lib/server/bootstrap.ts):
 // `config.json` (equipment/plate inventory + which block is active) and
 // `block-<id>.json` (one per training block, active or archived — never
 // overwritten wholesale, only status/outcome fields are amended on

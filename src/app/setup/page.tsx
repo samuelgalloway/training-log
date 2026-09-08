@@ -133,11 +133,22 @@ export default function SetupPage() {
     <div className="flex flex-col gap-6">
       <h1 className="text-2xl font-bold">Setup</h1>
 
+      <section className="card flex flex-col gap-2">
+        <h2 className="text-lg font-semibold">Google connection</h2>
+        <p className="text-sm text-ink/60">
+          Creates a private "Training Log" folder and Sheet in your own Google Drive, and gives this app access to only those two things — nothing
+          else in your Drive. See README.md for the one-time Google Cloud Console setup this needs before the button below will work.
+        </p>
+        <a href="/api/auth/google/start" className="btn-primary w-fit">
+          🔌 Connect Google
+        </a>
+      </section>
+
       {error && (
         <div className="card border-warn bg-warn/10 text-warn">
           <p className="font-semibold">Couldn't reach Google Sheets/Drive.</p>
           <p className="text-sm">{error}</p>
-          <p className="mt-2 text-sm">Check your env vars — see README.md.</p>
+          <p className="mt-2 text-sm">Click "Connect Google" above, or if you've already connected, check the values pasted into Vercel match what it printed.</p>
         </div>
       )}
 
