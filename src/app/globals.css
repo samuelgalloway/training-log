@@ -1,0 +1,53 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    -webkit-tap-highlight-color: transparent;
+  }
+  body {
+    @apply bg-paper text-ink;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  }
+  input,
+  button,
+  select,
+  textarea {
+    font-family: inherit;
+  }
+}
+
+@layer components {
+  /* Chalky-hands rule: every interactive control gets a real tap target. */
+  .btn {
+    @apply inline-flex items-center justify-center rounded-xl px-4 min-h-tap text-base font-semibold active:scale-[0.98] transition-transform select-none;
+  }
+  .btn-primary {
+    @apply btn bg-accent text-white;
+  }
+  .btn-secondary {
+    @apply btn bg-white border-2 border-line text-ink;
+  }
+  .btn-warn {
+    @apply btn bg-warn text-white;
+  }
+  .btn-ghost {
+    @apply btn bg-transparent text-ink underline underline-offset-2;
+  }
+  .card {
+    @apply bg-white rounded-2xl border border-line p-4 shadow-sm;
+  }
+  .field-input {
+    @apply w-full min-h-tap rounded-xl border-2 border-line px-3 text-lg;
+  }
+  .tag {
+    @apply inline-flex items-center rounded-full bg-line/60 px-2.5 py-1 text-xs font-medium;
+  }
+  .bottom-nav-link {
+    @apply flex flex-1 flex-col items-center justify-center gap-0.5 py-2 text-xs font-medium text-ink/60;
+  }
+  .bottom-nav-link[data-active="true"] {
+    @apply text-accent;
+  }
+}
