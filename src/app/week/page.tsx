@@ -13,6 +13,7 @@ const DOWS: Dow[] = ["MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"];
 function sessionLabel(session: Session): string {
   if (session.type === "lift") return session.name;
   if (session.type === "run") return `Run${session.subtype ? ` (${session.subtype})` : ""}`;
+  if (session.type === "mobility") return "Mobility";
   return "BJJ";
 }
 

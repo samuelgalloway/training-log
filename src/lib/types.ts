@@ -95,7 +95,13 @@ export interface BjjSession {
   log: string[];
 }
 
-export type Session = LiftSession | RunSession | BjjSession;
+export interface MobilitySession {
+  type: "mobility";
+  duration_min?: number;
+  note?: string;
+}
+
+export type Session = LiftSession | RunSession | BjjSession | MobilitySession;
 
 export interface Day {
   dow: Dow;

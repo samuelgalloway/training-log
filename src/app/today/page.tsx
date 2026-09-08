@@ -82,7 +82,14 @@ export default function TodayPage() {
       week: w.week,
       dow: dowVal,
       type: session.type,
-      name: session.type === "lift" ? session.name : session.type === "run" ? `Run${session.subtype ? ` (${session.subtype})` : ""}` : "BJJ",
+      name:
+        session.type === "lift"
+          ? session.name
+          : session.type === "run"
+            ? `Run${session.subtype ? ` (${session.subtype})` : ""}`
+            : session.type === "mobility"
+              ? "Mobility"
+              : "BJJ",
       status: "skipped",
     };
   }

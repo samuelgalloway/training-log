@@ -1,6 +1,6 @@
 "use client";
 
-import type { BjjSession, LoggedSession, RunSession } from "@/lib/types";
+import type { BjjSession, LoggedSession, MobilitySession, RunSession } from "@/lib/types";
 
 export default function SimpleSessionCard({
   session,
@@ -9,17 +9,19 @@ export default function SimpleSessionCard({
   onSync,
   syncStatus,
 }: {
-  session: RunSession | BjjSession;
+  session: RunSession | BjjSession | MobilitySession;
   meta: LoggedSession;
   onChange: (patch: Partial<LoggedSession>) => void;
   onSync: () => void;
   syncStatus: string | null;
 }) {
   const isRun = session.type === "run";
+  const isMobility = session.type === "mobility";
+  const title = isRun ? `Run${session.subtype ? ` — ${session.subtype}` : ""}` : isMobility ? "Mobility" : "BJJ";
 
   return (
     <div className="card flex flex-col gap-3">
-      <h3 className="text-lg font-semibold">{isRun ? `Run${session.subtype ? ` — ${session.subtype}` : ""}` : "BJJ"}</h3>
+      <h3 className="text-lg font-semibold">{title}</h3>
 
       {isRun && (
         <>
@@ -43,8 +45,9 @@ export default function SimpleSessionCard({
         </>
       )}
 
+      {isMobility && session.duration_min != null && <p className="text-sm text-ink/60">{session.duration_min} min</p>}
       {!isRun && session.note && <p className="text-sm italic text-ink/70">{session.note}</p>}
-      {!isRun && session.optional && <span className="tag w-fit">optional</span>}
+      {!isRun && !isMobility && session.optional && <span className="tag w-fit">optional</span>}
 
       <div className="flex gap-2">
         {(["done", "partial", "skipped"] as const).map((status) => (

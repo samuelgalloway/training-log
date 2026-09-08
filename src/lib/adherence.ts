@@ -19,6 +19,7 @@ export interface AdherenceRow {
 function sessionLabel(session: Session): string {
   if (session.type === "lift") return session.name;
   if (session.type === "run") return `Run${session.subtype ? ` (${session.subtype})` : ""}`;
+  if (session.type === "mobility") return "Mobility";
   return "BJJ";
 }
 
