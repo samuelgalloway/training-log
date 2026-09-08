@@ -19,6 +19,14 @@ export function resolveEquipment(block: Block | null, config: AppConfig | null):
   for (const im of blockImplements) implementsById[im.id] = im;
   for (const im of configImplements) implementsById[im.id] = im;
 
+  // Setup's "Kettlebell sizes owned" list is the live source of truth for the
+  // "kb" implement's fixed-size ladder once set — buying a new bell shouldn't
+  // require hand-editing the block JSON to see it in plate math.
+  const kbSizes = config?.equipment.kettlebell_sizes_owned ?? [];
+  if (kbSizes.length > 0 && implementsById["kb"]) {
+    implementsById["kb"] = { ...implementsById["kb"]!, sizes_lb: [...kbSizes].sort((a, b) => a - b) };
+  }
+
   const configInventory = config?.equipment.plate_inventory;
   const hasConfigPairs = configInventory && Object.keys(configInventory.pairs ?? {}).length > 0;
   const inventory = hasConfigPairs ? configInventory! : block?.plate_inventory ?? { unit: "lb", pairs: {} };

@@ -158,6 +158,22 @@ export async function importBlockAndActivate(newBlock: Block, outcomeSummaryForP
   }
   toSave.drive_file_id = fileId;
 
+  // First-ever import: Setup's equipment fields are still empty, so a block's
+  // own plate inventory/implements/kettlebell sizes become the starting
+  // config instead of leaving Setup blank until the user re-types everything
+  // the block JSON already states. Later imports never touch equipment the
+  // user has since customized in Setup.
+  const equipmentUntouched =
+    Object.keys(config.equipment.plate_inventory.pairs ?? {}).length === 0 &&
+    config.equipment.implements.length === 0 &&
+    config.equipment.kettlebell_sizes_owned.length === 0;
+  if (equipmentUntouched) {
+    if (newBlock.plate_inventory) config.equipment.plate_inventory = newBlock.plate_inventory;
+    config.equipment.implements = newBlock.implements;
+    const kb = newBlock.implements.find((im) => im.id === "kb");
+    if (kb?.sizes_lb) config.equipment.kettlebell_sizes_owned = [...kb.sizes_lb].sort((a, b) => a - b);
+  }
+
   config.active_block_id = newBlock.block.id;
   await saveConfig(config);
 
