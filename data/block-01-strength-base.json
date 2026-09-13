@@ -6,8 +6,8 @@
     "sequence": 1,
     "weeks": 8,
     "priority": "strength",
-    "start_date": "2026-09-21",
-    "end_date": "2026-11-15",
+    "start_date": "2026-09-14",
+    "end_date": "2026-11-08",
     "goal_horizon": "2027-07",
     "summary": "Post-race strength rebuild. Lifting is the priority; running holds a maintenance base with strides layered in to protect top-end speed. Running volume and speed become the priority in a later block.",
     "rationale": [
@@ -234,7 +234,7 @@
     {
       "week": 1,
       "phase": "intro",
-      "week_of": "2026-09-21",
+      "week_of": "2026-09-14",
       "planned_mileage": 10.0,
       "coach_note": "Baseline week. Pick loads you could stop 3 reps short of. The numbers you log this week are the reference point for the whole block \u2014 don't inflate them.",
       "days": [
@@ -617,7 +617,7 @@
     {
       "week": 2,
       "phase": "intro",
-      "week_of": "2026-09-28",
+      "week_of": "2026-09-21",
       "planned_mileage": 11.0,
       "coach_note": "Fourth set added to the mains. Still conservative on load. Expect real soreness \u2014 you haven't lifted properly in a month.",
       "days": [
@@ -1000,7 +1000,7 @@
     {
       "week": 3,
       "phase": "build",
-      "week_of": "2026-10-05",
+      "week_of": "2026-09-28",
       "planned_mileage": 11.5,
       "coach_note": "Strides start today. Four 20-second accelerations after Tuesday's easy run, full walk recovery. This is the cheapest speed work there is.",
       "days": [
@@ -1388,7 +1388,7 @@
     {
       "week": 4,
       "phase": "build",
-      "week_of": "2026-10-12",
+      "week_of": "2026-10-05",
       "planned_mileage": 13.0,
       "coach_note": "Load should be moving on all three mains by now. If bench has stalled two weeks running, that's a microplate problem, not a you problem.",
       "days": [
@@ -1776,7 +1776,7 @@
     {
       "week": 5,
       "phase": "build",
-      "week_of": "2026-10-19",
+      "week_of": "2026-10-12",
       "planned_mileage": 14.0,
       "coach_note": "Heaviest week so far and the accessories pick up a set. Watch the RPE drift flag \u2014 same weight feeling harder is the signal to back off, not push.",
       "days": [
@@ -2164,7 +2164,7 @@
     {
       "week": 6,
       "phase": "deload",
-      "week_of": "2026-10-26",
+      "week_of": "2026-10-19",
       "planned_mileage": 9.5,
       "coach_note": "DELOAD. Two sets, drop main lift loads 15%. Do less than you want to. This is where the adaptation from weeks 3-5 actually lands.",
       "days": [
@@ -2550,7 +2550,7 @@
     {
       "week": 7,
       "phase": "peak",
-      "week_of": "2026-11-02",
+      "week_of": "2026-10-26",
       "planned_mileage": 14.5,
       "coach_note": "Back to full volume from week 5 loads. You should feel noticeably fresh \u2014 if you don't, the deload wasn't deep enough and we adjust block 2.",
       "days": [
@@ -2938,7 +2938,7 @@
     {
       "week": 8,
       "phase": "peak",
-      "week_of": "2026-11-09",
+      "week_of": "2026-11-02",
       "planned_mileage": 15.0,
       "coach_note": "Last week of the block. Push the mains. Log everything cleanly \u2014 this is the data the next block gets designed from.",
       "days": [
