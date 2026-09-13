@@ -149,10 +149,13 @@ export default function TodayPage() {
   }
 
   if (!week || !day) {
+    const notStartedYet = todayIso < block.block.start_date;
     return (
       <div className="card">
-        <p className="font-semibold">No planned week found for today.</p>
-        <p className="mt-1 text-sm text-ink/60">Check the active block's date range in Setup.</p>
+        <p className="font-semibold">{notStartedYet ? "This block hasn't started yet." : "No planned week found for today."}</p>
+        <p className="mt-1 text-sm text-ink/60">
+          {notStartedYet ? `Starts ${block.block.start_date} — check Week for a preview.` : "Check the active block's date range in Setup."}
+        </p>
       </div>
     );
   }

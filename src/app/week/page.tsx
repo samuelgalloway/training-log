@@ -76,7 +76,12 @@ export default function WeekPage() {
     }
   }
 
-  const baseWeek = block ? findWeekForDate(block, today) : undefined;
+  // Before the block's first week_of, findWeekForDate has nothing to return
+  // (there's no week whose start date has passed yet) — fall back to the
+  // earliest week so "today" still shows a preview instead of a blank screen.
+  const earliestWeek = block ? [...block.weeks].sort((a, b) => a.week - b.week)[0] : undefined;
+  const blockNotStartedYet = !!block && !findWeekForDate(block, today);
+  const baseWeek = block ? (findWeekForDate(block, today) ?? earliestWeek) : undefined;
   const targetWeekNum = baseWeek ? baseWeek.week + weekOffset : undefined;
   const rawWeek = block?.weeks.find((w) => w.week === targetWeekNum);
   const swaps = block && rawWeek ? getSwaps(block.block.id, rawWeek.week) : [];
@@ -120,6 +125,12 @@ export default function WeekPage() {
 
   return (
     <div key={refreshTick} className="flex flex-col gap-4">
+      {blockNotStartedYet && weekOffset === 0 && (
+        <div className="card border-accent/40 bg-accent/10 text-sm text-accent">
+          <p className="font-semibold">This block hasn't started yet.</p>
+          <p>Starts {block.block.start_date} — this is a preview of week 1.</p>
+        </div>
+      )}
       <div className="flex items-center justify-between">
         <button className="btn-ghost" onClick={() => setWeekOffset((o) => o - 1)} disabled={targetWeekNum === 1}>
           ← Prev
