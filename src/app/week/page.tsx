@@ -1,12 +1,14 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import SessionDetail from "@/components/SessionDetail";
 import { findWeekForDate, toIsoDate } from "@/lib/dateUtils";
+import { resolveEquipment } from "@/lib/equipment";
 import { validateSessionMove, type SwapWarning } from "@/lib/validator";
 import { addSwap, applySwaps, getSwaps } from "@/lib/weekSwaps";
 import { listPendingSessions } from "@/lib/localStore";
 import { makeSessionId } from "@/lib/sessionId";
-import type { Block, Day, Dow, LoggedSession, Session } from "@/lib/types";
+import type { AppConfig, Block, Day, Dow, LoggedSession, LoggedSet, Session } from "@/lib/types";
 
 const DOWS: Dow[] = ["MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"];
 
@@ -48,10 +50,13 @@ const STATUS_STYLE: Record<string, string> = {
 
 export default function WeekPage() {
   const [block, setBlock] = useState<Block | null | undefined>(undefined);
+  const [config, setConfig] = useState<AppConfig | null>(null);
   const [loggedSessions, setLoggedSessions] = useState<LoggedSession[]>([]);
+  const [historySets, setHistorySets] = useState<LoggedSet[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [weekOffset, setWeekOffset] = useState(0);
   const [selectedFrom, setSelectedFrom] = useState<Dow | null>(null);
+  const [expandedDow, setExpandedDow] = useState<Dow | null>(null);
   const [pendingMove, setPendingMove] = useState<{ from: Dow; to: Dow; result: ReturnType<typeof validateSessionMove> } | null>(null);
   const [refreshTick, setRefreshTick] = useState(0);
 
@@ -63,18 +68,24 @@ export default function WeekPage() {
 
   async function load() {
     try {
-      const [blockRes, historyRes] = await Promise.all([fetch("/api/blocks/active"), fetch("/api/history")]);
+      const [blockRes, historyRes, configRes] = await Promise.all([fetch("/api/blocks/active"), fetch("/api/history"), fetch("/api/config")]);
       const blockJson = await blockRes.json();
       const historyJson = await historyRes.json();
+      const configJson = await configRes.json();
       if (blockJson?.error) throw new Error(blockJson.error);
       if (historyJson?.error) throw new Error(historyJson.error);
+      if (configJson?.error) throw new Error(configJson.error);
       setBlock(blockJson);
       setLoggedSessions(historyJson.sessions ?? []);
+      setHistorySets(historyJson.sets ?? []);
+      setConfig(configJson);
     } catch (err) {
       setError((err as Error).message);
       setBlock(null);
     }
   }
+
+  const { implementsById, inventory } = resolveEquipment(block ?? null, config);
 
   // Before the block's first week_of, findWeekForDate has nothing to return
   // (there's no week whose start date has passed yet) — fall back to the
@@ -155,18 +166,15 @@ export default function WeekPage() {
           const date = dateFor(day.dow);
           const statuses = statusFor(day, date, block.block.id, loggedSessions);
           const isAnchored = block.constraints.anchored_days.includes(day.dow) || day.movable === false;
+          const isExpanded = expandedDow === day.dow;
           return (
-            <button
-              key={day.dow}
-              onClick={() => onDayTap(day.dow)}
-              className={`card flex flex-col gap-1 text-left ${selectedFrom === day.dow ? "ring-2 ring-accent" : ""}`}
-            >
-              <div className="flex items-center justify-between">
+            <div key={day.dow} className={`card flex flex-col gap-1 ${selectedFrom === day.dow ? "ring-2 ring-accent" : ""}`}>
+              <button type="button" onClick={() => onDayTap(day.dow)} className="flex items-center justify-between text-left">
                 <span className="font-semibold">
                   {day.dow} <span className="font-normal text-ink/50">{date}</span>
                 </span>
                 {isAnchored && <span className="tag">anchored</span>}
-              </div>
+              </button>
               {day.sessions.length === 0 && <span className="text-sm text-ink/50">Rest</span>}
               {day.sessions.map((session, i) => (
                 <div key={i} className="flex items-center justify-between">
@@ -174,7 +182,23 @@ export default function WeekPage() {
                   <span className={`tag ${STATUS_STYLE[statuses[i] ?? "upcoming"]}`}>{statuses[i]}</span>
                 </div>
               ))}
-            </button>
+              {day.sessions.length > 0 && (
+                <button
+                  type="button"
+                  className="btn-ghost mt-1 min-h-0 self-start px-0 py-1 text-sm"
+                  onClick={() => setExpandedDow(isExpanded ? null : day.dow)}
+                >
+                  {isExpanded ? "▲ Hide details" : "▾ What's included"}
+                </button>
+              )}
+              {isExpanded && (
+                <div className="flex flex-col gap-2 border-t border-line pt-2">
+                  {day.sessions.map((session, i) => (
+                    <SessionDetail key={i} session={session} date={date} implementsById={implementsById} inventory={inventory} historySets={historySets} />
+                  ))}
+                </div>
+              )}
+            </div>
           );
         })}
       </div>
