@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { generateBrief } from "@/lib/brief";
 import { getActiveBlock } from "@/lib/server/drive";
 import { readBody, readSessions, readSets } from "@/lib/server/sheets";
+import { googleErrorMessage } from "@/lib/server/googleAuth";
 import { toIsoDate } from "@/lib/dateUtils";
 
 export async function GET() {
@@ -14,6 +15,6 @@ export async function GET() {
     const markdown = generateBrief(block, sets, sessions, body, toIsoDate(new Date()));
     return NextResponse.json({ markdown });
   } catch (err) {
-    return NextResponse.json({ error: (err as Error).message }, { status: 500 });
+    return NextResponse.json({ error: googleErrorMessage(err) }, { status: 500 });
   }
 }

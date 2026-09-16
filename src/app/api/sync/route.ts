@@ -4,6 +4,7 @@
 // this contract.
 import { NextRequest, NextResponse } from "next/server";
 import { appendSession, appendSets } from "@/lib/server/sheets";
+import { googleErrorMessage } from "@/lib/server/googleAuth";
 import type { LoggedSession, LoggedSet } from "@/lib/types";
 
 export async function POST(req: NextRequest) {
@@ -16,6 +17,6 @@ export async function POST(req: NextRequest) {
     await appendSession(body.session);
     return NextResponse.json({ ok: true });
   } catch (err) {
-    return NextResponse.json({ error: (err as Error).message }, { status: 500 });
+    return NextResponse.json({ error: googleErrorMessage(err) }, { status: 500 });
   }
 }

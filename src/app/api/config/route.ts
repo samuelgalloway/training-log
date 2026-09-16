@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getConfig, saveConfig } from "@/lib/server/drive";
+import { googleErrorMessage } from "@/lib/server/googleAuth";
 import type { AppConfig } from "@/lib/types";
 
 export async function GET() {
@@ -7,7 +8,7 @@ export async function GET() {
     const config = await getConfig();
     return NextResponse.json(config);
   } catch (err) {
-    return NextResponse.json({ error: (err as Error).message }, { status: 500 });
+    return NextResponse.json({ error: googleErrorMessage(err) }, { status: 500 });
   }
 }
 
@@ -17,6 +18,6 @@ export async function POST(req: NextRequest) {
     await saveConfig(config);
     return NextResponse.json(config);
   } catch (err) {
-    return NextResponse.json({ error: (err as Error).message }, { status: 500 });
+    return NextResponse.json({ error: googleErrorMessage(err) }, { status: 500 });
   }
 }

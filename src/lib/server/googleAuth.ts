@@ -36,3 +36,24 @@ export function requireEnv(name: string): string {
   if (!value) throw new Error(`Missing required env var: ${name}. See .env.example.`);
   return value;
 }
+
+/**
+ * Every API route just forwards err.message straight into the UI, and every
+ * Google API call in drive.ts/sheets.ts can fail this way once the stored
+ * refresh token stops working — a few different underlying causes (7-day
+ * expiry while the OAuth consent screen is still in "Testing" status,
+ * access revoked at myaccount.google.com/permissions, a redeployed client
+ * secret) all surface as the same opaque OAuth error code. "invalid_grant"
+ * is accurate but meaningless on a phone screen; give the actual fix
+ * instead of the wire-protocol term for it.
+ */
+export function googleErrorMessage(err: unknown): string {
+  const message = err instanceof Error ? err.message : String(err);
+  if (/invalid_grant/i.test(message)) {
+    return 'Google access has expired or was revoked. Go to Setup and click "Connect Google" again to reconnect.';
+  }
+  if (/invalid_client/i.test(message)) {
+    return "Google client ID/secret in Vercel don't match the OAuth client in Google Cloud Console — check GOOGLE_OAUTH_CLIENT_ID/GOOGLE_OAUTH_CLIENT_SECRET, then reconnect from Setup.";
+  }
+  return message;
+}

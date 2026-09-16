@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { appendBody, readBody } from "@/lib/server/sheets";
+import { googleErrorMessage } from "@/lib/server/googleAuth";
 import type { BodyEntry } from "@/lib/types";
 
 export async function GET() {
@@ -7,7 +8,7 @@ export async function GET() {
     const entries = await readBody();
     return NextResponse.json(entries);
   } catch (err) {
-    return NextResponse.json({ error: (err as Error).message }, { status: 500 });
+    return NextResponse.json({ error: googleErrorMessage(err) }, { status: 500 });
   }
 }
 
@@ -18,6 +19,6 @@ export async function POST(req: NextRequest) {
     await appendBody(entry);
     return NextResponse.json({ ok: true });
   } catch (err) {
-    return NextResponse.json({ error: (err as Error).message }, { status: 500 });
+    return NextResponse.json({ error: googleErrorMessage(err) }, { status: 500 });
   }
 }
