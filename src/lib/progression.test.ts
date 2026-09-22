@@ -8,7 +8,7 @@ const deadlift: Exercise & { progression: LoadProgression } = {
   sets: 3,
   reps: 5,
   target_rpe: 7,
-  progression: { mode: "load", increment_lb: 10, rule: "all_sets_at_reps_and_rpe<=8" },
+  progression: { mode: "load", increment_lb: 10, rule: "all_sets_at_reps" },
 };
 
 describe("evaluateLoadProgression", () => {
@@ -30,7 +30,7 @@ describe("evaluateLoadProgression", () => {
     expect(result).toEqual({ mode: "load", action: "advance", currentLoadLb: 245, nextLoadLb: 255 });
   });
 
-  it("holds when a set missed reps, even at low RPE", () => {
+  it("holds when a set missed reps", () => {
     const result = evaluateLoadProgression(
       [
         {
@@ -46,6 +46,47 @@ describe("evaluateLoadProgression", () => {
       deadlift
     );
     expect(result.action).toBe("hold");
+    if (result.action === "hold") expect(result.reason).toMatch(/didn't hit target reps/i);
+  });
+
+  it("advances even at a high RPE — reps hit is the whole rule by default", () => {
+    const result = evaluateLoadProgression(
+      [
+        {
+          session_id: "s1",
+          date: "2026-09-21",
+          sets: [
+            { weight_lb: 245, reps: 5, rpe: 9 },
+            { weight_lb: 245, reps: 5, rpe: 10 },
+            { weight_lb: 245, reps: 5, rpe: 9 },
+          ],
+        },
+      ],
+      deadlift
+    );
+    expect(result).toEqual({ mode: "load", action: "advance", currentLoadLb: 245, nextLoadLb: 255 });
+  });
+
+  it("holds when every rep was hit but the session was marked brutal", () => {
+    const result = evaluateLoadProgression(
+      [
+        {
+          session_id: "s1",
+          date: "2026-09-21",
+          sets: [
+            { weight_lb: 245, reps: 5, rpe: 9, brutal: true },
+            { weight_lb: 245, reps: 5, rpe: 9, brutal: true },
+            { weight_lb: 245, reps: 5, rpe: 9, brutal: true },
+          ],
+        },
+      ],
+      deadlift
+    );
+    expect(result.action).toBe("hold");
+    if (result.action === "hold") {
+      expect(result.currentLoadLb).toBe(245);
+      expect(result.reason).toMatch(/marked brutal/i);
+    }
   });
 
   it("deloads 10% after two consecutive failures at the same weight", () => {

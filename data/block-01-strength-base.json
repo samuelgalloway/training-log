@@ -207,7 +207,7 @@
     ]
   },
   "progression_defaults": {
-    "load_rule": "If every set hit the target reps at RPE <= 8, add one increment next session.",
+    "load_rule": "If every set hit the target reps, add one increment next session. RPE is logged but does not gate this -- mark a session \"brutal\" (in the app) to force a hold even if the reps were hit.",
     "stall_rule": "Two consecutive sessions failing the rule at the same load: drop 10% and build back.",
     "min_increment_note": "Smallest increment is limited by your smallest plate pair. If bench stalls at 5 lb jumps, a pair of 1.25 lb microplates is the fix."
   },
@@ -256,7 +256,7 @@
                   "progression": {
                     "mode": "load",
                     "increment_lb": 10,
-                    "rule": "all_sets_at_reps_and_rpe<=8"
+                    "rule": "all_sets_at_reps"
                   },
                   "note": "Low handles. This is the anchor lift of the block.",
                   "sub": "Conventional deadlift off the barbell if the trap bar is tied up."
@@ -270,7 +270,7 @@
                   "progression": {
                     "mode": "load",
                     "increment_lb": 5,
-                    "rule": "all_sets_at_reps_and_rpe<=8"
+                    "rule": "all_sets_at_reps"
                   },
                   "note": "Spotter arms set at depth. Never train to failure alone in the basement.",
                   "sub": "Goblet squat if the back is unhappy."
@@ -367,7 +367,7 @@
                   "progression": {
                     "mode": "load",
                     "increment_lb": 5,
-                    "rule": "all_sets_at_reps_and_rpe<=8"
+                    "rule": "all_sets_at_reps"
                   },
                   "note": "Spotter arms up. 2-3 min rest."
                 },
@@ -380,7 +380,7 @@
                   "progression": {
                     "mode": "load",
                     "increment_lb": 5,
-                    "rule": "all_sets_at_reps_and_rpe<=8"
+                    "rule": "all_sets_at_reps"
                   },
                   "note": "Dead stop on the floor each rep."
                 },
@@ -393,7 +393,7 @@
                   "progression": {
                     "mode": "load",
                     "increment_lb": 5,
-                    "rule": "all_sets_at_reps_and_rpe<=8"
+                    "rule": "all_sets_at_reps"
                   },
                   "note": "Adjustable bench at ~30 deg, in the rack with spotter arms. Upper chest and front delt work that needs no ceiling clearance. Overhead pressing lives in Session C on the landmine.",
                   "ceiling_modified": true
@@ -507,7 +507,7 @@
                   "progression": {
                     "mode": "load",
                     "increment_lb": 2.5,
-                    "rule": "all_sets_at_reps_and_rpe<=8"
+                    "rule": "all_sets_at_reps"
                   },
                   "note": "Seated on the bench - ceiling clearance. Replaces the KB press: the 18/36 gap is too wide to progress through; the landmine gives 2.5 lb steps.",
                   "ceiling_modified": true
@@ -533,7 +533,7 @@
                   "progression": {
                     "mode": "load",
                     "increment_lb": 10,
-                    "rule": "all_sets_at_reps_and_rpe<=8"
+                    "rule": "all_sets_at_reps"
                   },
                   "note": "High-handle bar. 1-sec squeeze at the top."
                 },
@@ -546,7 +546,7 @@
                   "progression": {
                     "mode": "load",
                     "increment_lb": 2.5,
-                    "rule": "all_sets_at_reps_and_rpe<=8"
+                    "rule": "all_sets_at_reps"
                   },
                   "sub": "18 lb KB curl if the empty bar is too much for 12 clean reps."
                 },
@@ -639,7 +639,7 @@
                   "progression": {
                     "mode": "load",
                     "increment_lb": 10,
-                    "rule": "all_sets_at_reps_and_rpe<=8"
+                    "rule": "all_sets_at_reps"
                   },
                   "note": "Low handles. This is the anchor lift of the block.",
                   "sub": "Conventional deadlift off the barbell if the trap bar is tied up."
@@ -653,7 +653,7 @@
                   "progression": {
                     "mode": "load",
                     "increment_lb": 5,
-                    "rule": "all_sets_at_reps_and_rpe<=8"
+                    "rule": "all_sets_at_reps"
                   },
                   "note": "Spotter arms set at depth. Never train to failure alone in the basement.",
                   "sub": "Goblet squat if the back is unhappy."
@@ -750,7 +750,7 @@
                   "progression": {
                     "mode": "load",
                     "increment_lb": 5,
-                    "rule": "all_sets_at_reps_and_rpe<=8"
+                    "rule": "all_sets_at_reps"
                   },
                   "note": "Spotter arms up. 2-3 min rest."
                 },
@@ -763,7 +763,7 @@
                   "progression": {
                     "mode": "load",
                     "increment_lb": 5,
-                    "rule": "all_sets_at_reps_and_rpe<=8"
+                    "rule": "all_sets_at_reps"
                   },
                   "note": "Dead stop on the floor each rep."
                 },
@@ -776,7 +776,7 @@
                   "progression": {
                     "mode": "load",
                     "increment_lb": 5,
-                    "rule": "all_sets_at_reps_and_rpe<=8"
+                    "rule": "all_sets_at_reps"
                   },
                   "note": "Adjustable bench at ~30 deg, in the rack with spotter arms. Upper chest and front delt work that needs no ceiling clearance. Overhead pressing lives in Session C on the landmine.",
                   "ceiling_modified": true
@@ -890,7 +890,7 @@
                   "progression": {
                     "mode": "load",
                     "increment_lb": 2.5,
-                    "rule": "all_sets_at_reps_and_rpe<=8"
+                    "rule": "all_sets_at_reps"
                   },
                   "note": "Seated on the bench - ceiling clearance. Replaces the KB press: the 18/36 gap is too wide to progress through; the landmine gives 2.5 lb steps.",
                   "ceiling_modified": true
@@ -916,7 +916,7 @@
                   "progression": {
                     "mode": "load",
                     "increment_lb": 10,
-                    "rule": "all_sets_at_reps_and_rpe<=8"
+                    "rule": "all_sets_at_reps"
                   },
                   "note": "High-handle bar. 1-sec squeeze at the top."
                 },
@@ -929,7 +929,7 @@
                   "progression": {
                     "mode": "load",
                     "increment_lb": 2.5,
-                    "rule": "all_sets_at_reps_and_rpe<=8"
+                    "rule": "all_sets_at_reps"
                   },
                   "sub": "18 lb KB curl if the empty bar is too much for 12 clean reps."
                 },
@@ -1022,7 +1022,7 @@
                   "progression": {
                     "mode": "load",
                     "increment_lb": 10,
-                    "rule": "all_sets_at_reps_and_rpe<=8"
+                    "rule": "all_sets_at_reps"
                   },
                   "note": "Low handles. This is the anchor lift of the block.",
                   "sub": "Conventional deadlift off the barbell if the trap bar is tied up."
@@ -1036,7 +1036,7 @@
                   "progression": {
                     "mode": "load",
                     "increment_lb": 5,
-                    "rule": "all_sets_at_reps_and_rpe<=8"
+                    "rule": "all_sets_at_reps"
                   },
                   "note": "Spotter arms set at depth. Never train to failure alone in the basement.",
                   "sub": "Goblet squat if the back is unhappy."
@@ -1138,7 +1138,7 @@
                   "progression": {
                     "mode": "load",
                     "increment_lb": 5,
-                    "rule": "all_sets_at_reps_and_rpe<=8"
+                    "rule": "all_sets_at_reps"
                   },
                   "note": "Spotter arms up. 2-3 min rest."
                 },
@@ -1151,7 +1151,7 @@
                   "progression": {
                     "mode": "load",
                     "increment_lb": 5,
-                    "rule": "all_sets_at_reps_and_rpe<=8"
+                    "rule": "all_sets_at_reps"
                   },
                   "note": "Dead stop on the floor each rep."
                 },
@@ -1164,7 +1164,7 @@
                   "progression": {
                     "mode": "load",
                     "increment_lb": 5,
-                    "rule": "all_sets_at_reps_and_rpe<=8"
+                    "rule": "all_sets_at_reps"
                   },
                   "note": "Adjustable bench at ~30 deg, in the rack with spotter arms. Upper chest and front delt work that needs no ceiling clearance. Overhead pressing lives in Session C on the landmine.",
                   "ceiling_modified": true
@@ -1278,7 +1278,7 @@
                   "progression": {
                     "mode": "load",
                     "increment_lb": 2.5,
-                    "rule": "all_sets_at_reps_and_rpe<=8"
+                    "rule": "all_sets_at_reps"
                   },
                   "note": "Seated on the bench - ceiling clearance. Replaces the KB press: the 18/36 gap is too wide to progress through; the landmine gives 2.5 lb steps.",
                   "ceiling_modified": true
@@ -1304,7 +1304,7 @@
                   "progression": {
                     "mode": "load",
                     "increment_lb": 10,
-                    "rule": "all_sets_at_reps_and_rpe<=8"
+                    "rule": "all_sets_at_reps"
                   },
                   "note": "High-handle bar. 1-sec squeeze at the top."
                 },
@@ -1317,7 +1317,7 @@
                   "progression": {
                     "mode": "load",
                     "increment_lb": 2.5,
-                    "rule": "all_sets_at_reps_and_rpe<=8"
+                    "rule": "all_sets_at_reps"
                   },
                   "sub": "18 lb KB curl if the empty bar is too much for 12 clean reps."
                 },
@@ -1410,7 +1410,7 @@
                   "progression": {
                     "mode": "load",
                     "increment_lb": 10,
-                    "rule": "all_sets_at_reps_and_rpe<=8"
+                    "rule": "all_sets_at_reps"
                   },
                   "note": "Low handles. This is the anchor lift of the block.",
                   "sub": "Conventional deadlift off the barbell if the trap bar is tied up."
@@ -1424,7 +1424,7 @@
                   "progression": {
                     "mode": "load",
                     "increment_lb": 5,
-                    "rule": "all_sets_at_reps_and_rpe<=8"
+                    "rule": "all_sets_at_reps"
                   },
                   "note": "Spotter arms set at depth. Never train to failure alone in the basement.",
                   "sub": "Goblet squat if the back is unhappy."
@@ -1526,7 +1526,7 @@
                   "progression": {
                     "mode": "load",
                     "increment_lb": 5,
-                    "rule": "all_sets_at_reps_and_rpe<=8"
+                    "rule": "all_sets_at_reps"
                   },
                   "note": "Spotter arms up. 2-3 min rest."
                 },
@@ -1539,7 +1539,7 @@
                   "progression": {
                     "mode": "load",
                     "increment_lb": 5,
-                    "rule": "all_sets_at_reps_and_rpe<=8"
+                    "rule": "all_sets_at_reps"
                   },
                   "note": "Dead stop on the floor each rep."
                 },
@@ -1552,7 +1552,7 @@
                   "progression": {
                     "mode": "load",
                     "increment_lb": 5,
-                    "rule": "all_sets_at_reps_and_rpe<=8"
+                    "rule": "all_sets_at_reps"
                   },
                   "note": "Adjustable bench at ~30 deg, in the rack with spotter arms. Upper chest and front delt work that needs no ceiling clearance. Overhead pressing lives in Session C on the landmine.",
                   "ceiling_modified": true
@@ -1666,7 +1666,7 @@
                   "progression": {
                     "mode": "load",
                     "increment_lb": 2.5,
-                    "rule": "all_sets_at_reps_and_rpe<=8"
+                    "rule": "all_sets_at_reps"
                   },
                   "note": "Seated on the bench - ceiling clearance. Replaces the KB press: the 18/36 gap is too wide to progress through; the landmine gives 2.5 lb steps.",
                   "ceiling_modified": true
@@ -1692,7 +1692,7 @@
                   "progression": {
                     "mode": "load",
                     "increment_lb": 10,
-                    "rule": "all_sets_at_reps_and_rpe<=8"
+                    "rule": "all_sets_at_reps"
                   },
                   "note": "High-handle bar. 1-sec squeeze at the top."
                 },
@@ -1705,7 +1705,7 @@
                   "progression": {
                     "mode": "load",
                     "increment_lb": 2.5,
-                    "rule": "all_sets_at_reps_and_rpe<=8"
+                    "rule": "all_sets_at_reps"
                   },
                   "sub": "18 lb KB curl if the empty bar is too much for 12 clean reps."
                 },
@@ -1798,7 +1798,7 @@
                   "progression": {
                     "mode": "load",
                     "increment_lb": 10,
-                    "rule": "all_sets_at_reps_and_rpe<=8"
+                    "rule": "all_sets_at_reps"
                   },
                   "note": "Low handles. This is the anchor lift of the block.",
                   "sub": "Conventional deadlift off the barbell if the trap bar is tied up."
@@ -1812,7 +1812,7 @@
                   "progression": {
                     "mode": "load",
                     "increment_lb": 5,
-                    "rule": "all_sets_at_reps_and_rpe<=8"
+                    "rule": "all_sets_at_reps"
                   },
                   "note": "Spotter arms set at depth. Never train to failure alone in the basement.",
                   "sub": "Goblet squat if the back is unhappy."
@@ -1914,7 +1914,7 @@
                   "progression": {
                     "mode": "load",
                     "increment_lb": 5,
-                    "rule": "all_sets_at_reps_and_rpe<=8"
+                    "rule": "all_sets_at_reps"
                   },
                   "note": "Spotter arms up. 2-3 min rest."
                 },
@@ -1927,7 +1927,7 @@
                   "progression": {
                     "mode": "load",
                     "increment_lb": 5,
-                    "rule": "all_sets_at_reps_and_rpe<=8"
+                    "rule": "all_sets_at_reps"
                   },
                   "note": "Dead stop on the floor each rep."
                 },
@@ -1940,7 +1940,7 @@
                   "progression": {
                     "mode": "load",
                     "increment_lb": 5,
-                    "rule": "all_sets_at_reps_and_rpe<=8"
+                    "rule": "all_sets_at_reps"
                   },
                   "note": "Adjustable bench at ~30 deg, in the rack with spotter arms. Upper chest and front delt work that needs no ceiling clearance. Overhead pressing lives in Session C on the landmine.",
                   "ceiling_modified": true
@@ -2054,7 +2054,7 @@
                   "progression": {
                     "mode": "load",
                     "increment_lb": 2.5,
-                    "rule": "all_sets_at_reps_and_rpe<=8"
+                    "rule": "all_sets_at_reps"
                   },
                   "note": "Seated on the bench - ceiling clearance. Replaces the KB press: the 18/36 gap is too wide to progress through; the landmine gives 2.5 lb steps.",
                   "ceiling_modified": true
@@ -2080,7 +2080,7 @@
                   "progression": {
                     "mode": "load",
                     "increment_lb": 10,
-                    "rule": "all_sets_at_reps_and_rpe<=8"
+                    "rule": "all_sets_at_reps"
                   },
                   "note": "High-handle bar. 1-sec squeeze at the top."
                 },
@@ -2093,7 +2093,7 @@
                   "progression": {
                     "mode": "load",
                     "increment_lb": 2.5,
-                    "rule": "all_sets_at_reps_and_rpe<=8"
+                    "rule": "all_sets_at_reps"
                   },
                   "sub": "18 lb KB curl if the empty bar is too much for 12 clean reps."
                 },
@@ -2186,7 +2186,7 @@
                   "progression": {
                     "mode": "load",
                     "increment_lb": 10,
-                    "rule": "all_sets_at_reps_and_rpe<=8"
+                    "rule": "all_sets_at_reps"
                   },
                   "note": "Low handles. This is the anchor lift of the block.",
                   "sub": "Conventional deadlift off the barbell if the trap bar is tied up."
@@ -2200,7 +2200,7 @@
                   "progression": {
                     "mode": "load",
                     "increment_lb": 5,
-                    "rule": "all_sets_at_reps_and_rpe<=8"
+                    "rule": "all_sets_at_reps"
                   },
                   "note": "Spotter arms set at depth. Never train to failure alone in the basement.",
                   "sub": "Goblet squat if the back is unhappy."
@@ -2298,7 +2298,7 @@
                   "progression": {
                     "mode": "load",
                     "increment_lb": 5,
-                    "rule": "all_sets_at_reps_and_rpe<=8"
+                    "rule": "all_sets_at_reps"
                   },
                   "note": "Spotter arms up. 2-3 min rest."
                 },
@@ -2311,7 +2311,7 @@
                   "progression": {
                     "mode": "load",
                     "increment_lb": 5,
-                    "rule": "all_sets_at_reps_and_rpe<=8"
+                    "rule": "all_sets_at_reps"
                   },
                   "note": "Dead stop on the floor each rep."
                 },
@@ -2324,7 +2324,7 @@
                   "progression": {
                     "mode": "load",
                     "increment_lb": 5,
-                    "rule": "all_sets_at_reps_and_rpe<=8"
+                    "rule": "all_sets_at_reps"
                   },
                   "note": "Adjustable bench at ~30 deg, in the rack with spotter arms. Upper chest and front delt work that needs no ceiling clearance. Overhead pressing lives in Session C on the landmine.",
                   "ceiling_modified": true
@@ -2439,7 +2439,7 @@
                   "progression": {
                     "mode": "load",
                     "increment_lb": 2.5,
-                    "rule": "all_sets_at_reps_and_rpe<=8"
+                    "rule": "all_sets_at_reps"
                   },
                   "note": "Seated on the bench - ceiling clearance. Replaces the KB press: the 18/36 gap is too wide to progress through; the landmine gives 2.5 lb steps.",
                   "ceiling_modified": true
@@ -2465,7 +2465,7 @@
                   "progression": {
                     "mode": "load",
                     "increment_lb": 10,
-                    "rule": "all_sets_at_reps_and_rpe<=8"
+                    "rule": "all_sets_at_reps"
                   },
                   "note": "High-handle bar. 1-sec squeeze at the top."
                 },
@@ -2478,7 +2478,7 @@
                   "progression": {
                     "mode": "load",
                     "increment_lb": 2.5,
-                    "rule": "all_sets_at_reps_and_rpe<=8"
+                    "rule": "all_sets_at_reps"
                   },
                   "sub": "18 lb KB curl if the empty bar is too much for 12 clean reps."
                 },
@@ -2572,7 +2572,7 @@
                   "progression": {
                     "mode": "load",
                     "increment_lb": 10,
-                    "rule": "all_sets_at_reps_and_rpe<=8"
+                    "rule": "all_sets_at_reps"
                   },
                   "note": "Low handles. This is the anchor lift of the block.",
                   "sub": "Conventional deadlift off the barbell if the trap bar is tied up."
@@ -2586,7 +2586,7 @@
                   "progression": {
                     "mode": "load",
                     "increment_lb": 5,
-                    "rule": "all_sets_at_reps_and_rpe<=8"
+                    "rule": "all_sets_at_reps"
                   },
                   "note": "Spotter arms set at depth. Never train to failure alone in the basement.",
                   "sub": "Goblet squat if the back is unhappy."
@@ -2688,7 +2688,7 @@
                   "progression": {
                     "mode": "load",
                     "increment_lb": 5,
-                    "rule": "all_sets_at_reps_and_rpe<=8"
+                    "rule": "all_sets_at_reps"
                   },
                   "note": "Spotter arms up. 2-3 min rest."
                 },
@@ -2701,7 +2701,7 @@
                   "progression": {
                     "mode": "load",
                     "increment_lb": 5,
-                    "rule": "all_sets_at_reps_and_rpe<=8"
+                    "rule": "all_sets_at_reps"
                   },
                   "note": "Dead stop on the floor each rep."
                 },
@@ -2714,7 +2714,7 @@
                   "progression": {
                     "mode": "load",
                     "increment_lb": 5,
-                    "rule": "all_sets_at_reps_and_rpe<=8"
+                    "rule": "all_sets_at_reps"
                   },
                   "note": "Adjustable bench at ~30 deg, in the rack with spotter arms. Upper chest and front delt work that needs no ceiling clearance. Overhead pressing lives in Session C on the landmine.",
                   "ceiling_modified": true
@@ -2828,7 +2828,7 @@
                   "progression": {
                     "mode": "load",
                     "increment_lb": 2.5,
-                    "rule": "all_sets_at_reps_and_rpe<=8"
+                    "rule": "all_sets_at_reps"
                   },
                   "note": "Seated on the bench - ceiling clearance. Replaces the KB press: the 18/36 gap is too wide to progress through; the landmine gives 2.5 lb steps.",
                   "ceiling_modified": true
@@ -2854,7 +2854,7 @@
                   "progression": {
                     "mode": "load",
                     "increment_lb": 10,
-                    "rule": "all_sets_at_reps_and_rpe<=8"
+                    "rule": "all_sets_at_reps"
                   },
                   "note": "High-handle bar. 1-sec squeeze at the top."
                 },
@@ -2867,7 +2867,7 @@
                   "progression": {
                     "mode": "load",
                     "increment_lb": 2.5,
-                    "rule": "all_sets_at_reps_and_rpe<=8"
+                    "rule": "all_sets_at_reps"
                   },
                   "sub": "18 lb KB curl if the empty bar is too much for 12 clean reps."
                 },
@@ -2960,7 +2960,7 @@
                   "progression": {
                     "mode": "load",
                     "increment_lb": 10,
-                    "rule": "all_sets_at_reps_and_rpe<=8"
+                    "rule": "all_sets_at_reps"
                   },
                   "note": "Low handles. This is the anchor lift of the block.",
                   "sub": "Conventional deadlift off the barbell if the trap bar is tied up."
@@ -2974,7 +2974,7 @@
                   "progression": {
                     "mode": "load",
                     "increment_lb": 5,
-                    "rule": "all_sets_at_reps_and_rpe<=8"
+                    "rule": "all_sets_at_reps"
                   },
                   "note": "Spotter arms set at depth. Never train to failure alone in the basement.",
                   "sub": "Goblet squat if the back is unhappy."
@@ -3076,7 +3076,7 @@
                   "progression": {
                     "mode": "load",
                     "increment_lb": 5,
-                    "rule": "all_sets_at_reps_and_rpe<=8"
+                    "rule": "all_sets_at_reps"
                   },
                   "note": "Spotter arms up. 2-3 min rest."
                 },
@@ -3089,7 +3089,7 @@
                   "progression": {
                     "mode": "load",
                     "increment_lb": 5,
-                    "rule": "all_sets_at_reps_and_rpe<=8"
+                    "rule": "all_sets_at_reps"
                   },
                   "note": "Dead stop on the floor each rep."
                 },
@@ -3102,7 +3102,7 @@
                   "progression": {
                     "mode": "load",
                     "increment_lb": 5,
-                    "rule": "all_sets_at_reps_and_rpe<=8"
+                    "rule": "all_sets_at_reps"
                   },
                   "note": "Adjustable bench at ~30 deg, in the rack with spotter arms. Upper chest and front delt work that needs no ceiling clearance. Overhead pressing lives in Session C on the landmine.",
                   "ceiling_modified": true
@@ -3216,7 +3216,7 @@
                   "progression": {
                     "mode": "load",
                     "increment_lb": 2.5,
-                    "rule": "all_sets_at_reps_and_rpe<=8"
+                    "rule": "all_sets_at_reps"
                   },
                   "note": "Seated on the bench - ceiling clearance. Replaces the KB press: the 18/36 gap is too wide to progress through; the landmine gives 2.5 lb steps.",
                   "ceiling_modified": true
@@ -3242,7 +3242,7 @@
                   "progression": {
                     "mode": "load",
                     "increment_lb": 10,
-                    "rule": "all_sets_at_reps_and_rpe<=8"
+                    "rule": "all_sets_at_reps"
                   },
                   "note": "High-handle bar. 1-sec squeeze at the top."
                 },
@@ -3255,7 +3255,7 @@
                   "progression": {
                     "mode": "load",
                     "increment_lb": 2.5,
-                    "rule": "all_sets_at_reps_and_rpe<=8"
+                    "rule": "all_sets_at_reps"
                   },
                   "sub": "18 lb KB curl if the empty bar is too much for 12 clean reps."
                 },

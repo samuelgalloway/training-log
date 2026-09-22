@@ -5,7 +5,7 @@
 import "server-only";
 import { google } from "googleapis";
 
-const SETS_HEADER = ["session_id", "date", "exercise", "implement", "set_index", "weight_lb", "reps", "rpe", "note"];
+const SETS_HEADER = ["session_id", "date", "exercise", "implement", "set_index", "weight_lb", "reps", "rpe", "note", "brutal"];
 const SESSIONS_HEADER = [
   "session_id", "date", "block_id", "week", "dow", "type", "name", "status",
   "sleep", "soreness", "joint_flag", "note", "rpe", "avg_hr", "distance_mi",

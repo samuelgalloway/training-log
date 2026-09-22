@@ -7,7 +7,7 @@ import { google } from "googleapis";
 import { getGoogleAuth, requireEnv } from "./googleAuth";
 import type { BodyEntry, LoggedSession, LoggedSet } from "../types";
 
-const SETS_RANGE = "sets!A:I";
+const SETS_RANGE = "sets!A:J";
 const SESSIONS_RANGE = "sessions!A:O";
 const BODY_RANGE = "body!A:F";
 
@@ -38,6 +38,7 @@ export function setToRow(s: LoggedSet): (string | number)[] {
     s.reps ?? "",
     s.rpe ?? "",
     s.note ?? "",
+    s.brutal ? "TRUE" : "",
   ];
 }
 
@@ -52,6 +53,9 @@ function rowToSet(row: unknown[]): LoggedSet {
     reps: num(row[6]),
     rpe: num(row[7]),
     note: str(row[8]) || undefined,
+    // Sheets rows synced before this column existed just have nothing here —
+    // absent reads as false, same as never having tapped the toggle.
+    brutal: str(row[9]).toUpperCase() === "TRUE",
   };
 }
 

@@ -163,6 +163,18 @@ export function calcPlateLoad(
 }
 
 /**
+ * The reverse of calcPlateLoad: given the plates already on the bar (one
+ * side's worth — the other side is assumed to mirror it), what's the total?
+ * Trivial arithmetic, but it lives here so the "plates on the bar → total"
+ * direction is covered by the same tests as "target → plates" instead of
+ * hand-rolled in a component.
+ */
+export function totalFromPlates(barWeightLb: number, perSide: Record<string, number>): number {
+  const perSideLb = Object.entries(perSide).reduce((sum, [denom, count]) => sum + Number(denom) * Math.max(0, count), 0);
+  return barWeightLb + perSideLb * 2;
+}
+
+/**
  * The smallest possible load increment on a given implement, given the
  * inventory — i.e. 2x the smallest-denomination pair owned. Used to explain
  * why progression is stalling at a coarser jump than the plan calls for.

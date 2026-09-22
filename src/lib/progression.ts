@@ -10,7 +10,7 @@ import type { Exercise, LoadProgression, LoggedSet, RepsProgression } from "./ty
 export interface SessionSetSummary {
   session_id: string;
   date: string;
-  sets: { weight_lb: number | null; reps: number | null; rpe: number | null }[];
+  sets: { weight_lb: number | null; reps: number | null; rpe: number | null; brutal?: boolean }[];
 }
 
 export type LoadProgressionResult =
@@ -34,7 +34,7 @@ export function buildSessionSummariesFromSets(sets: LoggedSet[], exercise: strin
   const bySession = new Map<string, SessionSetSummary>();
   for (const s of relevant) {
     const entry = bySession.get(s.session_id) ?? { session_id: s.session_id, date: s.date, sets: [] };
-    entry.sets.push({ weight_lb: s.weight_lb, reps: s.reps, rpe: s.rpe });
+    entry.sets.push({ weight_lb: s.weight_lb, reps: s.reps, rpe: s.rpe, brutal: s.brutal });
     bySession.set(s.session_id, entry);
   }
   return Array.from(bySession.values()).sort((a, b) => a.date.localeCompare(b.date));
@@ -57,14 +57,20 @@ function mostCommonWeight(sets: SessionSetSummary["sets"]): number | null {
   return best;
 }
 
+// Reps hit is the whole rule by default — never gated on RPE. RPE stays a
+// logged, useful number (History's drift detector watches it), but it's not
+// what decides "advance or not": Sam found that grading his own RPE mid-set
+// isn't something he wants to think about, and grindy-but-successful sets
+// are still successful. "brutal" is the one explicit override for "technically
+// hit the reps, but that shouldn't count" — a single end-of-exercise tap
+// instead of a number to get right in the moment.
 function hitRule(session: SessionSetSummary, weight: number, targetReps: number | null): boolean {
   if (session.sets.length === 0) return false;
-  return session.sets.every(
-    (s) =>
-      s.weight_lb === weight &&
-      (targetReps == null || (s.reps ?? -Infinity) >= targetReps) &&
-      (s.rpe == null || s.rpe <= 8)
-  );
+  return session.sets.every((s) => s.weight_lb === weight && (targetReps == null || (s.reps ?? -Infinity) >= targetReps));
+}
+
+function sessionSucceeded(session: SessionSetSummary, weight: number, targetReps: number | null): boolean {
+  return hitRule(session, weight, targetReps) && !session.sets.some((s) => s.brutal);
 }
 
 export function evaluateLoadProgression(
@@ -83,7 +89,7 @@ export function evaluateLoadProgression(
     return { mode: "load", action: "hold", currentLoadLb: null, reason: "No weight logged last session." };
   }
 
-  if (hitRule(last, lastWeight, targetReps)) {
+  if (sessionSucceeded(last, lastWeight, targetReps)) {
     return {
       mode: "load",
       action: "advance",
@@ -95,7 +101,7 @@ export function evaluateLoadProgression(
   if (sessions.length >= 2) {
     const prev = sessions[sessions.length - 2]!;
     const prevWeight = mostCommonWeight(prev.sets);
-    if (prevWeight === lastWeight && !hitRule(prev, prevWeight, targetReps)) {
+    if (prevWeight === lastWeight && !sessionSucceeded(prev, prevWeight, targetReps)) {
       // Two consecutive sessions failing at the same load: drop 10%, build back.
       const nextLoadLb = Math.round(lastWeight * 0.9 * 2) / 2;
       return {
@@ -103,16 +109,17 @@ export function evaluateLoadProgression(
         action: "deload",
         currentLoadLb: lastWeight,
         nextLoadLb,
-        reason: "Two consecutive sessions missed the rep/RPE target at this load.",
+        reason: "Two consecutive sessions at this weight didn't succeed.",
       };
     }
   }
 
+  const missedReps = !hitRule(last, lastWeight, targetReps);
   return {
     mode: "load",
     action: "hold",
     currentLoadLb: lastWeight,
-    reason: "Didn't hit target reps at RPE ≤ 8 last time — repeat the weight.",
+    reason: missedReps ? "Didn't hit target reps last time — repeat the weight." : "Marked brutal last time — repeat the weight.",
   };
 }
 

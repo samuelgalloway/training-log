@@ -33,6 +33,7 @@ export default function SessionDetail({
   historySets: LoggedSet[];
 }) {
   if (session.type === "lift") {
+    const loadableImplements = Object.values(implementsById).filter((im) => im.loadable);
     return (
       <div className="flex flex-col gap-3">
         {session.exercises.map((exercise, i) => {
@@ -56,6 +57,7 @@ export default function SessionDetail({
               {implement && (
                 <PlateMath
                   implement={implement}
+                  barOptions={loadableImplements}
                   inventory={inventory}
                   defaultTarget={exercise.load_lb ?? lastTime[0]?.weight_lb ?? undefined}
                   fixedSizeLadder={exercise.progression?.mode === "reps" ? exercise.progression.load_ladder_lb : undefined}

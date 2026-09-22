@@ -227,6 +227,8 @@ export interface LoggedSet {
   reps: number | null;
   rpe: number | null;
   note?: string;
+  /** Hit the reps, but it was a grind — the explicit "hold this weight" override, independent of RPE. */
+  brutal?: boolean;
 }
 
 export type SessionStatus = "done" | "partial" | "skipped";

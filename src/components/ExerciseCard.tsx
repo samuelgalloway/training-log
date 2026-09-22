@@ -26,6 +26,7 @@ function progressionSuggestion(exercise: Exercise, historySets: LoggedSet[]): st
 export default function ExerciseCard({
   exercise,
   implement,
+  barOptions,
   inventory,
   sessionId,
   sessionSeed,
@@ -36,6 +37,7 @@ export default function ExerciseCard({
 }: {
   exercise: Exercise;
   implement: Implement | undefined;
+  barOptions?: Implement[];
   inventory: PlateInventory;
   sessionId: string;
   sessionSeed: LoggedSession;
@@ -46,6 +48,11 @@ export default function ExerciseCard({
 }) {
   const numSets = exercise.sets;
   const suggestion = progressionSuggestion(exercise, historySets);
+  // Reps hit is the whole progression rule by default (see progression.ts) —
+  // this is the one explicit override: hit every rep, but it shouldn't count
+  // toward advancing next time. Lazily seeded from whatever's already saved,
+  // so reopening a session mid-way shows the right state.
+  const [brutal, setBrutal] = useState(() => pendingSets[0]?.brutal ?? false);
 
   function setFor(idx: number): LoggedSet | undefined {
     return pendingSets.find((s) => s.set_index === idx);
@@ -62,9 +69,17 @@ export default function ExerciseCard({
       weight_lb: current?.weight_lb ?? null,
       reps: current?.reps ?? null,
       rpe: current?.rpe ?? null,
+      brutal: current?.brutal ?? brutal,
       ...patch,
     };
     onLogSet(next);
+  }
+
+  function toggleBrutal() {
+    const next = !brutal;
+    setBrutal(next);
+    // Re-stamp every set already logged this exercise, not just future ones.
+    for (const s of pendingSets) onLogSet({ ...s, brutal: next });
   }
 
   function copyLast(idx: number) {
@@ -96,7 +111,15 @@ export default function ExerciseCard({
         </div>
       )}
 
-      {implement && <PlateMath implement={implement} inventory={inventory} defaultTarget={exercise.load_lb ?? lastTime[0]?.weight_lb ?? undefined} fixedSizeLadder={exercise.progression?.mode === "reps" ? exercise.progression.load_ladder_lb : undefined} />}
+      {implement && (
+        <PlateMath
+          implement={implement}
+          barOptions={barOptions}
+          inventory={inventory}
+          defaultTarget={exercise.load_lb ?? lastTime[0]?.weight_lb ?? undefined}
+          fixedSizeLadder={exercise.progression?.mode === "reps" ? exercise.progression.load_ladder_lb : undefined}
+        />
+      )}
 
       <div className="flex flex-col gap-2">
         {Array.from({ length: numSets }, (_, i) => i + 1).map((idx) => {
@@ -140,6 +163,17 @@ export default function ExerciseCard({
           );
         })}
       </div>
+
+      {exercise.progression?.mode === "load" && (
+        <button
+          type="button"
+          className={brutal ? "btn-warn min-h-0 w-fit px-3 py-1.5 text-sm" : "btn-secondary min-h-0 w-fit px-3 py-1.5 text-sm"}
+          onClick={toggleBrutal}
+          aria-pressed={brutal}
+        >
+          {brutal ? "🥵 Marked brutal — will hold next time" : "🥵 That was brutal"}
+        </button>
+      )}
     </div>
   );
 }

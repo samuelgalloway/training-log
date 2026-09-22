@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { calcPlateLoad, closestFixedSize, smallestIncrement } from "./plates";
+import { calcPlateLoad, closestFixedSize, smallestIncrement, totalFromPlates } from "./plates";
 import type { Implement, PlateInventory } from "./types";
 
 // Inventory lifted straight from data/block-01-strength-base.json.
@@ -102,6 +102,22 @@ describe("calcPlateLoad — fixed-load implements", () => {
     if (!result.loadable) {
       expect(result.sizeUsedLb).toBe(40);
     }
+  });
+});
+
+describe("totalFromPlates — the reverse direction: plates on the bar, what's the total", () => {
+  it("matches calcPlateLoad's own answer for the trap bar 225 example", () => {
+    // 45 + 35 + 2.5 + 1.25 per side, on the 58 lb trap bar → 225.5
+    expect(totalFromPlates(58, { "45": 1, "35": 1, "2.5": 1, "1.25": 1 })).toBe(225.5);
+  });
+
+  it("bar only (no plates) is just the bar weight", () => {
+    expect(totalFromPlates(74, {})).toBe(74);
+  });
+
+  it("ignores zero/negative counts rather than subtracting", () => {
+    // bar 45 + (2×45 per side, 25s and the negative 10 ignored) × 2 = 45 + 180
+    expect(totalFromPlates(45, { "45": 2, "25": 0, "10": -1 })).toBe(225);
   });
 });
 
