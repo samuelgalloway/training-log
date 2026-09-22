@@ -46,7 +46,7 @@ describe("evaluateLoadProgression", () => {
       deadlift
     );
     expect(result.action).toBe("hold");
-    if (result.action === "hold") expect(result.reason).toMatch(/didn't hit target reps/i);
+    if (result.action === "hold") expect(result.reason).toBe("Only 2 of 3 sets hit 5 reps at 245 lb last time — repeat the weight.");
   });
 
   it("advances even at a high RPE — reps hit is the whole rule by default", () => {
@@ -87,6 +87,27 @@ describe("evaluateLoadProgression", () => {
       expect(result.currentLoadLb).toBe(245);
       expect(result.reason).toMatch(/marked brutal/i);
     }
+  });
+
+  it("a warm-up ramp (not every set at the working weight) holds and says how many sets actually qualified", () => {
+    const result = evaluateLoadProgression(
+      [
+        {
+          session_id: "s1",
+          date: "2026-09-21",
+          sets: [
+            { weight_lb: 205, reps: 5, rpe: 5 },
+            { weight_lb: 225, reps: 5, rpe: 6 },
+            { weight_lb: 245, reps: 5, rpe: 7 }, // the actual "working" set — hit the reps
+          ],
+        },
+      ],
+      deadlift
+    );
+    // mostCommonWeight has no true mode here (each weight appears once) —
+    // whichever it lands on, at most 1 of 3 sets shares that weight.
+    expect(result.action).toBe("hold");
+    if (result.action === "hold") expect(result.reason).toMatch(/^Only 1 of 3 sets hit 5 reps at \d+ lb last time/);
   });
 
   it("deloads 10% after two consecutive failures at the same weight", () => {

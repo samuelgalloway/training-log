@@ -115,11 +115,23 @@ export function evaluateLoadProgression(
   }
 
   const missedReps = !hitRule(last, lastWeight, targetReps);
+  let reason = "Marked brutal last time — repeat the weight.";
+  if (missedReps) {
+    // hitRule requires every set at lastWeight AND at/above targetReps — say
+    // how many actually qualified, since "didn't hit target reps" alone
+    // reads the same whether one set came up a rep short or the session was
+    // a ramp where only the top set was even at this weight.
+    const qualifying = last.sets.filter(
+      (s) => s.weight_lb === lastWeight && (targetReps == null || (s.reps ?? -Infinity) >= targetReps)
+    ).length;
+    const repsPart = targetReps != null ? `${targetReps} reps` : "the target";
+    reason = `Only ${qualifying} of ${last.sets.length} sets hit ${repsPart} at ${lastWeight} lb last time — repeat the weight.`;
+  }
   return {
     mode: "load",
     action: "hold",
     currentLoadLb: lastWeight,
-    reason: missedReps ? "Didn't hit target reps last time — repeat the weight." : "Marked brutal last time — repeat the weight.",
+    reason,
   };
 }
 

@@ -24,6 +24,24 @@ function progressionLine(exercise: Exercise, result: ReturnType<typeof evaluateP
   return "";
 }
 
+/** All sets for one exercise+implement, grouped back into sessions (chronological) — the full picture behind e1rmTrend's top-set-only points, so a hold/advance call is checkable against what was actually logged. */
+function sessionBreakdown(sets: LoggedSet[]): { session_id: string; date: string; sets: LoggedSet[] }[] {
+  const bySession = new Map<string, LoggedSet[]>();
+  for (const s of sets) {
+    if (s.weight_lb == null && s.reps == null) continue; // nothing logged on this row
+    const arr = bySession.get(s.session_id);
+    if (arr) arr.push(s);
+    else bySession.set(s.session_id, [s]);
+  }
+  return Array.from(bySession.entries())
+    .map(([session_id, sessionSets]) => ({
+      session_id,
+      date: sessionSets[0]!.date,
+      sets: [...sessionSets].sort((a, b) => a.set_index - b.set_index),
+    }))
+    .sort((a, b) => a.date.localeCompare(b.date));
+}
+
 function collectExerciseCatalog(block: Block): Map<string, Exercise> {
   const catalog = new Map<string, Exercise>();
   for (const week of block.weeks) {
@@ -143,12 +161,23 @@ export default function HistoryPage() {
 
             <details>
               <summary className="cursor-pointer text-sm text-ink/60">All sessions ({trend.length})</summary>
-              <ul className="mt-1 text-sm">
-                {trend.map((p) => (
-                  <li key={p.session_id}>
-                    {p.date}: {p.topSetWeightLb}×{p.topSetReps} → e1RM {p.e1rm.toFixed(0)}
-                  </li>
-                ))}
+              <ul className="mt-2 flex flex-col gap-2 text-sm">
+                {sessionBreakdown(groupSets).map((session) => {
+                  const point = trend.find((p) => p.session_id === session.session_id);
+                  return (
+                    <li key={session.session_id}>
+                      <p className="font-medium">
+                        {session.date}
+                        {point && <span className="font-normal text-ink/50"> — e1RM {point.e1rm.toFixed(0)} (top set)</span>}
+                      </p>
+                      <p className="text-ink/70">
+                        {session.sets
+                          .map((s) => `${s.weight_lb ?? "–"}×${s.reps ?? "–"}${s.rpe != null ? ` @${s.rpe}` : ""}${s.brutal ? " 🥵" : ""}`)
+                          .join(", ")}
+                      </p>
+                    </li>
+                  );
+                })}
               </ul>
             </details>
           </div>
