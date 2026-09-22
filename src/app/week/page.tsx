@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import SessionDetail from "@/components/SessionDetail";
-import { findWeekForDate, toIsoDate } from "@/lib/dateUtils";
+import { findWeekForDate, localIsoDate, toIsoDate } from "@/lib/dateUtils";
 import { resolveEquipment } from "@/lib/equipment";
 import { validateSessionMove, type SwapWarning } from "@/lib/validator";
 import { addSwap, applySwaps, getSwaps } from "@/lib/weekSwaps";
@@ -22,7 +22,7 @@ function sessionLabel(session: Session): string {
 function statusFor(day: Day, date: string, blockId: string, loggedSessions: LoggedSession[]): Record<number, "done" | "partial" | "skipped" | "upcoming"> {
   const pending = listPendingSessions();
   const result: Record<number, "done" | "partial" | "skipped" | "upcoming"> = {};
-  const todayIso = toIsoDate(new Date());
+  const todayIso = localIsoDate(new Date());
 
   day.sessions.forEach((session, i) => {
     const idGuess = session.type === "lift" ? makeSessionId(blockId, date, "lift", session.slot) : makeSessionId(blockId, date, session.type, session.type);

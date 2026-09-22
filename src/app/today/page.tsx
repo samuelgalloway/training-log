@@ -5,7 +5,7 @@ import ExerciseCard from "@/components/ExerciseCard";
 import RestTimer from "@/components/RestTimer";
 import SessionEndForm from "@/components/SessionEndForm";
 import SimpleSessionCard from "@/components/SimpleSessionCard";
-import { findWeekForDate, isoDow, toIsoDate } from "@/lib/dateUtils";
+import { findWeekForDate, isoDow, localIsoDate } from "@/lib/dateUtils";
 import { resolveEquipment } from "@/lib/equipment";
 import { computeLiftStatus, lastSessionSets } from "@/lib/history";
 import { listPendingSessions, loadPendingSession, markSynced, type PendingSession, updateSessionMeta, upsertSet } from "@/lib/localStore";
@@ -22,7 +22,7 @@ export default function TodayPage() {
   const [syncStatus, setSyncStatus] = useState<Record<string, string>>({});
 
   const today = useMemo(() => new Date(), []);
-  const todayIso = toIsoDate(today);
+  const todayIso = localIsoDate(today);
   const dow = isoDow(today);
 
   useEffect(() => {
@@ -55,6 +55,10 @@ export default function TodayPage() {
   const week = block && rawWeek ? applySwaps(rawWeek, getSwaps(block.block.id, rawWeek.week)) : rawWeek;
   const day = week?.days.find((d) => d.dow === dow);
   const { implementsById, inventory } = resolveEquipment(block ?? null, config);
+  // Every loadable implement, offered as "which bar" in plate math — the
+  // block's own exercise.implement is just the default, not a lock-in (the
+  // 58 lb trap bar might be tied up and you grabbed the 74 instead).
+  const loadableImplements = Object.values(implementsById).filter((im) => im.loadable);
 
   // Seed pending-session state from localStorage once we know today's sessions.
   useEffect(() => {
@@ -190,6 +194,7 @@ export default function TodayPage() {
                     key={j}
                     exercise={exercise}
                     implement={implement}
+                    barOptions={loadableImplements}
                     inventory={inventory}
                     sessionId={id}
                     sessionSeed={seed}

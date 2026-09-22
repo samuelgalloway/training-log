@@ -3,11 +3,11 @@
 import { useEffect, useState } from "react";
 import Sparkline from "@/components/Sparkline";
 import { rollingBodyweightSeries } from "@/lib/body";
-import { toIsoDate } from "@/lib/dateUtils";
+import { localIsoDate } from "@/lib/dateUtils";
 import type { BodyEntry } from "@/lib/types";
 
 function emptyEntry(): BodyEntry {
-  return { date: toIsoDate(new Date()), bodyweight_lb: null, waist_in: null, chest_in: null, arm_in: null, thigh_in: null };
+  return { date: localIsoDate(new Date()), bodyweight_lb: null, waist_in: null, chest_in: null, arm_in: null, thigh_in: null };
 }
 
 export default function BodyPage() {

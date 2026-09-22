@@ -8,13 +8,30 @@ export function isoDow(date: Date): Dow {
   return DOW_ORDER[(jsDay + 6) % 7]!;
 }
 
+// toIsoDate is UTC-based on purpose: every caller that builds a Date to feed
+// it (dateForDow below, rollingBodyweightSeries in body.ts) constructs it as
+// a UTC-midnight anchor and walks it with setUTCDate — pure calendar-date
+// arithmetic that deliberately never touches a timezone. It is NOT what
+// "today" is. Feed it `new Date()` (the actual current moment) and, west of
+// UTC, it reports tomorrow's date for however many hours of the evening are
+// already past midnight UTC — which silently mis-dated logged sets to the
+// next day and made Week show a real workout as "skipped". Use localIsoDate
+// for "what calendar day is it right now, here."
 export function toIsoDate(date: Date): string {
   return date.toISOString().slice(0, 10);
 }
 
+/** The actual current (or given) wall-clock calendar date, in this device's own timezone — use this for "today", never toIsoDate(new Date()). */
+export function localIsoDate(date: Date): string {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+}
+
 /** Finds the block week whose date range contains `date`, using each week's `week_of` (a Monday). */
 export function findWeekForDate(block: Block, date: Date): Week | undefined {
-  const target = toIsoDate(date);
+  const target = localIsoDate(date);
   const weeksSorted = [...block.weeks].sort((a, b) => a.week_of.localeCompare(b.week_of));
   let found: Week | undefined;
   for (const week of weeksSorted) {

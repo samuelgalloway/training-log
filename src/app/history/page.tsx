@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Sparkline from "@/components/Sparkline";
 import { e1rmTrend, groupSetsByExerciseImplement } from "@/lib/e1rm";
+import { localIsoDate } from "@/lib/dateUtils";
 import { buildSessionSummariesFromSets, evaluateProgression } from "@/lib/progression";
 import { findRpeDrift } from "@/lib/rpeDrift";
 import type { Block, Exercise, LoggedSet } from "@/lib/types";
@@ -67,7 +68,10 @@ export default function HistoryPage() {
     setBriefLoading(true);
     setBriefStatus(null);
     try {
-      const res = await fetch("/api/brief");
+      // The server has no idea what timezone Sam is in — pass today's real
+      // local date so the brief's adherence cutoff matches what Week shows,
+      // instead of the server's own (UTC) notion of "today".
+      const res = await fetch(`/api/brief?asOf=${localIsoDate(new Date())}`);
       const json = await res.json();
       if (json?.error) throw new Error(json.error);
       setBriefMarkdown(json.markdown);
